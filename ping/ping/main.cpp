@@ -36,9 +36,14 @@ char sendbuf[BUFSIZE];
 //接收包
 char recvbuf[BUFSIZE];
 
-uint16_t GetCksum(uint16_t *addr, int len);
+
+//发送包
 void SendPacket(int sendcount);
+//计算校验和
+uint16_t GetCksum(uint16_t *addr, int len);
+//发送包
 void RecvePacket();
+//解包
 int unpack(int recvlen);
 
 int main(int argc, const char * argv[]) {
@@ -50,7 +55,7 @@ int main(int argc, const char * argv[]) {
     }
     
     
-    
+    //创建socket
     sockfd = socket(AF_INET,SOCK_RAW,IPPROTO_ICMP);
     if(sockfd < 0){
         perror("create socket error\n");
@@ -98,7 +103,7 @@ int main(int argc, const char * argv[]) {
     int sendcount = 1;
     
     
-    
+    //在循环中依次发送和接收包
     while(sendcount <= pkcount){
         SendPacket(sendcount);
         RecvePacket();
@@ -171,7 +176,7 @@ void RecvePacket(){
     
     
     while(1){
-        //设置时间限制，一秒未收到，则跳出
+        //设置时间限制，一秒未收到，则跳出当前函数
         timeval tv_out;
         tv_out.tv_sec = 1;
         setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv_out, sizeof(tv_out));
@@ -194,7 +199,7 @@ void RecvePacket(){
         cout<<""<<endl;
     }
     
-    //暂停一秒
+    //成功接受包并解包后，暂停一秒
     sleep(1);
     
 }
