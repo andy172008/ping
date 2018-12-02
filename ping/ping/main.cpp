@@ -199,6 +199,7 @@ void RecvePacket(){
     
 }
 
+//解包
 int unpack(int recvlen){
     ip *ipH;
     icmp *icmpH;
